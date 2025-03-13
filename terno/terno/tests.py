@@ -194,7 +194,7 @@ class MDBTestCase(BaseTestCase):
         self.assertEqual(list(mdb.tables.keys()),
                          ['Album', 'Artist', 'Genre', 'Invoice',
                           'InvoiceLine', 'MediaType', 'Playlist',
-                          'PlaylistTrack', 'Track'])
+                          'PlaylistTrack', 'Track' ,'invalid_table', 'test_table'])
 
     def test_allowed_columns(self):
         mdb = self.mdb
