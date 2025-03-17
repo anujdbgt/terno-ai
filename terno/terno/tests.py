@@ -212,7 +212,7 @@ class MDBTestCase(BaseTestCase):
 class LLMTestCase(BaseTestCase):
     def setUp(self) -> None:
         self.fake_llm = llms.FakeLLM(api_key="test_key")
-        self.openai_llm = llms.OpenAILLM(api_key="")
+        #self.openai_llm = llms.OpenAILLM(api_key="")
 
     @patch('terno.llm.LLMFactory.create_llm')
     def test_fake_llm(self, mock_create_llm):
