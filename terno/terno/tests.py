@@ -231,10 +231,11 @@ class LLMResponseTestCase(BaseTestCase):
         self.user_query = "Show me all albums"
         self.db_schema = "CREATE TABLE Album (AlbumId INTEGER, Title NVARCHAR(160), ArtistId INTEGER)"
 
-    @patch('terno.utils.LLMFactory.create_llm')
-    def test_llm_response(self, mock_create_llm):
-        print(f"LLM Called: {mock_create_llm.call_args}")  # Debugging output
+    
 
+    @patch('terno.utils.deduct_llm_credits')
+    def test_deduct_llm_credits(mock_deduct):   
+        mock_deduct.return_value = None  # ✅ No actual deduction
 
     @patch('terno.utils.LLMFactory.create_llm')
     @patch('terno.utils.create_pipeline')
