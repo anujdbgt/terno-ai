@@ -39,7 +39,7 @@ class BaseTestCase(TestCase):
             datasource=datasource
         )
 
-    def create_organisation(self, user, org_name="demo", subdomain="terno-root"):
+    def create_organisation(self, user, org_name="Test Org", subdomain="terno-root"):
 
         llm_credit, _ = LLMCredit.objects.get_or_create(owner=user, credit = 10)
 
