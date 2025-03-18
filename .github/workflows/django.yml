@@ -21,6 +21,7 @@ jobs:
         apt-get install -y git
         apt install -y build-essential pkg-config libmariadb-dev
         apt install -y libpq-dev
+        apt-get install -y curl
    
     - name: Install Dependencies
       run: |
