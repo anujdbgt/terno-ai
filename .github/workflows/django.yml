@@ -28,7 +28,6 @@ jobs:
         pip install psycopg2
         pip install mysqlclient
         pip install -r requirements.txt
-        mysql -uroot -e 'SELECT version()'
    
     - name: Run Tests
       env:
