@@ -22,7 +22,7 @@ jobs:
       run: |
         apt-get update
         apt-get install -y git
-        apt install -y pkg-config libmariadb-dev
+        apt install -y build-essential pkg-config libmariadb-dev
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
