@@ -21,13 +21,21 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'terno.settings')
 django.setup()
 
 class BaseTestCase(TestCase):
+
+    def db_path(self):
+        if os.path.exists("../Chinook_Sqlite.sqlite"):
+            connection_str = "sqlite:///../Chinook_Sqlite.sqlite"  # Local
+        else:
+            connection_str = "sqlite:///./Chinook_Sqlite.sqlite"
+        return connection_str
+
     def create_user(self):
         return User.objects.create_user(username='testuser', password='12345')
 
     def create_datasource(self, display_name='test_db'):
         datasource = models.DataSource.objects.create(
             display_name=display_name, type='default',
-            connection_str='sqlite:///./Chinook_Sqlite.sqlite',
+            connection_str=self.db_path(),
             enabled=True,
             
         )
@@ -121,7 +129,7 @@ class BaseTestCase(TestCase):
 
 class DBEngineTestCase(TestCase):
     def setUp(self):
-        self.connection_string = "sqlite:///./Chinook_Sqlite.sqlite"
+        self.connection_string = BaseTestCase.db_path()
         self.bigquery_connection_string = "bigquery://project/dataset"
         self.credentials_info = {
             "type": "service_account",
