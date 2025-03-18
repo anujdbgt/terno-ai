@@ -36,7 +36,6 @@ jobs:
       run: |
         coverage run terno/manage.py test terno && coverage report --fail-under=65 && coverage xml
 
-    steps:
     - uses: actions/checkout@main
     - uses: codecov/codecov-action@v5
       with:
