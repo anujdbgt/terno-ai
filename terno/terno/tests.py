@@ -27,7 +27,7 @@ class BaseTestCase(TestCase):
     def create_datasource(self, display_name='test_db'):
         datasource = models.DataSource.objects.create(
             display_name=display_name, type='default',
-            connection_str='sqlite:///../Chinook_Sqlite.sqlite',
+            connection_str='sqlite:///./Chinook_Sqlite.sqlite',
             enabled=True,
             
         )
@@ -39,6 +39,7 @@ class BaseTestCase(TestCase):
             datasource=datasource
         )
 
+    
     def create_organisation(self, user, org_name="Test Org", subdomain="terno-root"):
 
         llm_credit, _ = LLMCredit.objects.get_or_create(owner=user, credit = 10)
@@ -120,7 +121,7 @@ class BaseTestCase(TestCase):
 
 class DBEngineTestCase(TestCase):
     def setUp(self):
-        self.connection_string = "sqlite:///../Chinook_Sqlite.sqlite"
+        self.connection_string = "sqlite:///./Chinook_Sqlite.sqlite"
         self.bigquery_connection_string = "bigquery://project/dataset"
         self.credentials_info = {
             "type": "service_account",
@@ -230,12 +231,6 @@ class LLMResponseTestCase(BaseTestCase):
         self.organisation, _ = super().create_organisation(self.user)
         self.user_query = "Show me all albums"
         self.db_schema = "CREATE TABLE Album (AlbumId INTEGER, Title NVARCHAR(160), ArtistId INTEGER)"
-
-    
-
-    @patch('terno.utils.deduct_llm_credits')
-    def test_deduct_llm_credits(mock_deduct):   
-        mock_deduct.return_value = None  # ✅ No actual deduction
 
     @patch('terno.utils.LLMFactory.create_llm')
     @patch('terno.utils.create_pipeline')
