@@ -129,7 +129,7 @@ class BaseTestCase(TestCase):
 
 class DBEngineTestCase(TestCase):
     def setUp(self):
-        self.connection_string = BaseTestCase.db_path()
+        self.connection_string = BaseTestCase.db_path(self)
         self.bigquery_connection_string = "bigquery://project/dataset"
         self.credentials_info = {
             "type": "service_account",
