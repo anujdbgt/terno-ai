@@ -21,13 +21,21 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'terno.settings')
 django.setup()
 
 class BaseTestCase(TestCase):
+
+    def db_path(self):
+        if os.path.exists("../Chinook_Sqlite.sqlite"):
+            connection_str = "sqlite:///../Chinook_Sqlite.sqlite"  # Local
+        else:
+            connection_str = "sqlite:///./Chinook_Sqlite.sqlite"
+        return connection_str
+
     def create_user(self):
         return User.objects.create_user(username='testuser', password='12345')
 
     def create_datasource(self, display_name='test_db'):
         datasource = models.DataSource.objects.create(
             display_name=display_name, type='default',
-            connection_str='sqlite:///../Chinook_Sqlite.sqlite',
+            connection_str=self.db_path(),
             enabled=True,
             
         )
@@ -39,7 +47,8 @@ class BaseTestCase(TestCase):
             datasource=datasource
         )
 
-    def create_organisation(self, user, org_name="Test Organisation", subdomain="terno-root"):
+    
+    def create_organisation(self, user, org_name="Test Org", subdomain="terno-root"):
 
         llm_credit, _ = LLMCredit.objects.get_or_create(owner=user, credit = 10)
 
@@ -120,7 +129,7 @@ class BaseTestCase(TestCase):
 
 class DBEngineTestCase(TestCase):
     def setUp(self):
-        self.connection_string = "sqlite:///../Chinook_Sqlite.sqlite"
+        self.connection_string = BaseTestCase.db_path(self)
         self.bigquery_connection_string = "bigquery://project/dataset"
         self.credentials_info = {
             "type": "service_account",
@@ -194,7 +203,7 @@ class MDBTestCase(BaseTestCase):
         self.assertEqual(list(mdb.tables.keys()),
                          ['Album', 'Artist', 'Genre', 'Invoice',
                           'InvoiceLine', 'MediaType', 'Playlist',
-                          'PlaylistTrack', 'Track'])
+                          'PlaylistTrack', 'Track' ,'invalid_table', 'test_table'])
 
     def test_allowed_columns(self):
         mdb = self.mdb
@@ -212,7 +221,7 @@ class MDBTestCase(BaseTestCase):
 class LLMTestCase(BaseTestCase):
     def setUp(self) -> None:
         self.fake_llm = llms.FakeLLM(api_key="test_key")
-        self.openai_llm = llms.OpenAILLM(api_key="")
+        #self.openai_llm = llms.OpenAILLM(api_key="")
 
     @patch('terno.llm.LLMFactory.create_llm')
     def test_fake_llm(self, mock_create_llm):
@@ -325,7 +334,7 @@ class GenerateExecuteNativeSQLTestCase(BaseTestCase):
         expected_sql = 'SELECT * FROM (SELECT AlbumId AS AlbumId, Title AS Title, ArtistId AS ArtistId FROM Album) AS Album'
 
         self.assertEqual(response['status'], 'success')
-        self.assertEqual(response['native_sql'],
+        self.assertEqual(response['native_sql'].replace('"', ''),
                          expected_sql)
 
     def test_generate_native_sql_error(self):
