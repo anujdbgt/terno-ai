@@ -1,5 +1,7 @@
 # Terno AI
 
+[![codecov](https://codecov.io/gh/anujdbgt/terno-ai/branch/anuj-codecov/graph/badge.svg?token=2X4SAIJUGN)](https://codecov.io/gh/anujdbgt/terno-ai)
+
 Terno AI is an open-source, enterprise-grade Text-to-SQL solution that ensures accuracy, security, and performance when querying databases using natural language. It integrates domain knowledge management and SQL sanitization to generate safe and optimized queries.
 
 ## 🚀 Features
@@ -98,4 +100,3 @@ Ex. To allow access to group `Groceries` access to the restricted category_ids a
 
 We welcome contributions! Feel free to open an issue or submit a pull request
 
-[![codecov](https://codecov.io/gh/anujdbgt/terno-ai/branch/anuj-codecov/graph/badge.svg?token=2X4SAIJUGN)](https://codecov.io/gh/anujdbgt/terno-ai)
