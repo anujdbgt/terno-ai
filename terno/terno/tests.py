@@ -217,7 +217,7 @@ class MDBTestCase(BaseTestCase):
         self.assertEqual(list(mdb.tables.keys()),
                          ['Album', 'Artist', 'Genre', 'Invoice',
                           'InvoiceLine', 'MediaType', 'Playlist',
-                          'PlaylistTrack', 'Track', 'test_table'])
+                          'PlaylistTrack', 'Track'])
 
     def test_allowed_columns(self):
         mdb = self.mdb
@@ -480,9 +480,8 @@ class WriteSQLiteTestCase(BaseTestCase):
                 {'name': 'age', 'type': 'INT', 'nullable': True}
             ]
         }
-        sqlite_url = BaseTestCase.db_path(self)
+        sqlite_url = "sqlite:///:memory:"
         result = utils.write_sqlite_from_json(data, sqlite_url)
-        
         self.assertEqual(result['status'], 'success')
         engine = create_engine(sqlite_url)
         inspector = inspect(engine)
@@ -494,7 +493,7 @@ class WriteSQLiteTestCase(BaseTestCase):
             'table_name': 'empty_table',
             'columns': []
         }
-        sqlite_url = BaseTestCase.db_path(self)
+        sqlite_url = "sqlite:///:memory:"
         result = utils.write_sqlite_from_json(data, sqlite_url)
         
         self.assertEqual(result['status'], 'error')
@@ -508,7 +507,7 @@ class WriteSQLiteTestCase(BaseTestCase):
                 {'name': 'id', 'type': 'VARCHAR', 'nullable': True}
             ]
         }
-        sqlite_url = BaseTestCase.db_path(self)
+        sqlite_url = "sqlite:///:memory:"
         result = utils.write_sqlite_from_json(data, sqlite_url)
         
         self.assertEqual(result['status'], 'error')
@@ -520,8 +519,8 @@ class WriteSQLiteTestCase(BaseTestCase):
 
 class AddDataSQLiteTestCase(BaseTestCase):
     def setUp(self):
-        self.sqlite_url = BaseTestCase.db_path(self)
-        self.table = self.create_test_table(self.sqlite_url)
+        self.sqlite_url = "sqlite:///:memory:"
+        
         self.test_csv_file = "test_data.csv"
         self.data = {
             'header_row': True,
@@ -532,7 +531,10 @@ class AddDataSQLiteTestCase(BaseTestCase):
                 {'name': 'score', 'type': 'float'}
             ]
         }
+        
+        self.table = self.create_test_table(self.sqlite_url)
         self.data_source = BaseTestCase.create_datasource(self)
+
 
     def test_valid_data_insert(self):
         csv_data = self.test_csv_file 
